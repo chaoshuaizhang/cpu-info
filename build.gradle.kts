@@ -5,7 +5,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
+    // 刚开始这种方式有点问题，就换成了直接使用id的方式 ---start---
     alias(libs.plugins.dependencyUpdate)
+    // id("com.github.ben-manes.versions") version "0.51.0"
+    // 刚开始这种方式有点问题，就换成了直接使用id的方式 ---end---
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.kover)
     alias(libs.plugins.ksp) apply false
