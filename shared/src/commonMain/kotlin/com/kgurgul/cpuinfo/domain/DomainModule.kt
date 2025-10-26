@@ -18,6 +18,8 @@ import com.kgurgul.cpuinfo.domain.result.GetHardwareDataInteractor
 import com.kgurgul.cpuinfo.domain.result.GetLicensesInteractor
 import com.kgurgul.cpuinfo.domain.result.GetPackageNameInteractor
 import com.kgurgul.cpuinfo.domain.result.GetScreenDataInteractor
+import com.kgurgul.cpuinfo.features.custom.CustomRamCollector
+import com.kgurgul.cpuinfo.features.custom.ICustomMemoryCollector
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

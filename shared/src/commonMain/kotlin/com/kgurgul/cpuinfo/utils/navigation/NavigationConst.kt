@@ -5,6 +5,7 @@ object NavigationConst {
     const val BASE_URL = "https://kgurgul.com/assets/cpuinfo/"
     const val APP_WEBPAGE = "https://github.com/kamgurgul/cpu-info"
 
+    const val CUSTOM = "custom"
     const val INFORMATION = "information"
     const val APPLICATIONS = "applications"
     const val PROCESSES = "processes"

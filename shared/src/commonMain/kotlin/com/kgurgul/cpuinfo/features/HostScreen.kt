@@ -18,6 +18,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kgurgul.cpuinfo.features.applications.ApplicationsBaseRoute
 import com.kgurgul.cpuinfo.features.applications.applicationsScreen
+import com.kgurgul.cpuinfo.features.custom.CustomBaseRoute
+import com.kgurgul.cpuinfo.features.custom.customScreen
 import com.kgurgul.cpuinfo.features.information.InformationBaseRoute
 import com.kgurgul.cpuinfo.features.information.informationScreen
 import com.kgurgul.cpuinfo.features.processes.ProcessesBaseRoute
@@ -106,12 +108,13 @@ fun HostScreen(
     ) {
         NavHost(
             navController = navController,
-            startDestination = InformationBaseRoute,
+            startDestination = CustomBaseRoute,
             enterTransition = { fadeIn() },
             exitTransition = { fadeOut() },
             popEnterTransition = { fadeIn() },
             popExitTransition = { fadeOut() },
         ) {
+            customScreen()
             informationScreen()
             applicationsScreen()
             processesScreen()

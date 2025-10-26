@@ -20,6 +20,9 @@ import android.app.Application
 import com.kgurgul.cpuinfo.appinitializers.AppInitializerComponent
 import com.kgurgul.cpuinfo.di.androidModule
 import com.kgurgul.cpuinfo.di.sharedModule
+import com.kgurgul.cpuinfo.features.custom.collectorModules
+import com.kgurgul.cpuinfo.features.custom.useCaseModules
+import com.kgurgul.cpuinfo.features.custom.viewModelModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -32,6 +35,9 @@ class CpuInfoApp : Application() {
             modules(
                 androidModule,
                 sharedModule,
+                viewModelModules,
+                useCaseModules,
+                collectorModules
             )
         }
         AppInitializerComponent().init(this)

@@ -111,6 +111,7 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.core)
                 api(libs.kotlinx.immutable)
                 api(libs.kotlinx.serialization)
+                api("io.insert-koin:koin-annotations:2.1.0")
             }
         }
 
