@@ -58,34 +58,6 @@ data object CustomBaseRoute {
     data object CustomRoute
 }
 
-class PageA : INavPage {
-
-    override val route = "A"
-
-    override fun content(): @Composable (AnimatedContentScope.(NavBackStackEntry) -> Unit) {
-        Logger.i { "CSBCHBSHCB  fun" }
-        return {
-            Logger.i { "CSBCHBSHCB  Text" }
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                for (i in 0 until 10) {
-                    item {
-                        Text(
-                            "${i} -> Page A ${
-                                Random.nextInt(1000).also {
-                                    Logger.i { "CSBCHBSHCB   ${i} -> v = $it" }
-                                }
-                            }",
-                            fontSize = 50.sp,
-                            color = Color.White,
-                            modifier = Modifier.fillMaxWidth().padding(top = 100.dp)
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
 class PageB {
     fun content(): @Composable () -> Unit {
         Logger.i { "NCJSNCJSNJNC -> content()" }

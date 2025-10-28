@@ -21,7 +21,7 @@ fun HomePage() {
         fontSize = 50.sp,
         color = Color.White,
         modifier = Modifier.fillMaxWidth().padding(top = 100.dp).clickable {
-            RouteManager.push(DetailPage.ROUTE)
+            RouteManager.push(route = "Detail", "ppp")
         }
     )
 }

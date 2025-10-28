@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.toRoute
 import com.kgurgul.cpuinfo.features.custom.CustomNavigationBar
 import com.kgurgul.cpuinfo.features.custom.INavPage
 import com.kgurgul.cpuinfo.features.custom.viewmodel.MainIntent

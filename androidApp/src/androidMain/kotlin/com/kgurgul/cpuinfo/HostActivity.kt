@@ -2,6 +2,7 @@ package com.kgurgul.cpuinfo
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -19,6 +20,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.savedstate.SavedState
 import com.kgurgul.cpuinfo.features.HostScreen
 import com.kgurgul.cpuinfo.features.HostViewModel
 import com.kgurgul.cpuinfo.ui.shouldUseDarkTheme
@@ -32,6 +34,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import org.koin.android.logger.AndroidLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HostActivity : ComponentActivity() {
@@ -93,6 +96,7 @@ class HostActivity : ComponentActivity() {
                 useDarkTheme = darkTheme,
                 colors = colors,
             ) {
+                Log.d("CSCNHSC", "CSCNHSC ----- ")
                 HostScreen(
                     viewModel = viewModel,
                 )

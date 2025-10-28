@@ -9,8 +9,8 @@ interface INavPage {
 
     val route: String
 
-    val params: List<NamedNavArgument>?
-
     fun content(): @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
+
+    fun args(): List<NamedNavArgument> = emptyList()
 
 }

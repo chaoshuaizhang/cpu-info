@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import co.touchlab.kermit.Logger
 import com.kgurgul.cpuinfo.features.applications.ApplicationsBaseRoute
 import com.kgurgul.cpuinfo.features.applications.applicationsScreen
 import com.kgurgul.cpuinfo.features.custom.CustomBaseRoute
