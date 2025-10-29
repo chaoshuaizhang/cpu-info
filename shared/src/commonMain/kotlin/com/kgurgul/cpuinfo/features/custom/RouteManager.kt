@@ -9,26 +9,34 @@ import kotlinx.coroutines.launch
 
 object RouteManager {
 
-    val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val _routeMap = mutableMapOf<Routes, INavPage>()
     val routeMap: Map<Routes, INavPage> = _routeMap
 
-    val routePushChannel = Channel<RouteEntity<out Any>>()
+    private val routePushChannel = Channel<RouteEntity<out Any>>()
+
+    private val routePopChannel = Channel<RouteEntity<out Any>?>()
 
     val routePushFlow = routePushChannel.receiveAsFlow()
+
+    val routePopFlow = routePopChannel.receiveAsFlow()
 
     fun register(page: INavPage) {
         if (_routeMap.contains(page.route)) return
         _routeMap[page.route] = page
     }
 
-    fun <T : Any> push(route: RouteEntity<T>) {
+    fun <T : Routes> push(route: RouteEntity<T>) {
         scope.launch {
             routePushChannel.send(route)
         }
     }
 
-    fun startDestination() = routeMap.keys.first()
+    fun pop(route: RouteEntity<out Routes>? = null) {
+        scope.launch {
+            routePopChannel.send(route)
+        }
+    }
 
 }
 

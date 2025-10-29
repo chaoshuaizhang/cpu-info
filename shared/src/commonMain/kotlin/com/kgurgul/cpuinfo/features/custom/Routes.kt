@@ -3,6 +3,7 @@ package com.kgurgul.cpuinfo.features.custom
 import kotlinx.serialization.Serializable
 
 sealed interface Routes {
+    @Serializable
     object Main : Routes
 
     @Serializable

@@ -41,6 +41,16 @@ fun CustomNavHost(navHostController: NavHostController = rememberNavController()
                 )
             }
         }
+
+        launch {
+            RouteManager.routePopFlow.collect {
+                it?.route?.let {
+                    navHostController.popBackStack(it, true)
+                } ?: run {
+                    navHostController.popBackStack()
+                }
+            }
+        }
     }
     RouteManager.register(MainPage())
     RouteManager.register(JobGroup())

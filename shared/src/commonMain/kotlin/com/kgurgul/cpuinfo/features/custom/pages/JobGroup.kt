@@ -1,5 +1,6 @@
 package com.kgurgul.cpuinfo.features.custom.pages
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -13,6 +14,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.kgurgul.cpuinfo.features.custom.INavPage
+import com.kgurgul.cpuinfo.features.custom.RouteEntity
+import com.kgurgul.cpuinfo.features.custom.RouteManager
 import com.kgurgul.cpuinfo.features.custom.Routes
 import kotlinx.serialization.Serializable
 
@@ -46,7 +49,9 @@ fun NavGraphBuilder.navJobDetail() {
             text = "Job Detail - ${detail.name} | ${detail.age}",
             fontSize = 30.sp,
             color = Color.Blue,
-            modifier = Modifier.fillMaxWidth().padding(top = 100.dp)
+            modifier = Modifier.fillMaxWidth().padding(top = 100.dp).clickable {
+                RouteManager.pop()
+            }
         )
     }
 }
