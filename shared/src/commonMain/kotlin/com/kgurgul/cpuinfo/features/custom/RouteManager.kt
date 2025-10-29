@@ -1,5 +1,6 @@
 package com.kgurgul.cpuinfo.features.custom
 
+import com.kgurgul.cpuinfo.features.custom.pages.DetailPage
 import kotlin.reflect.KClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,9 +24,9 @@ object RouteManager {
         _routeMap[page.route] = page
     }
 
-    inline fun <reified T : Any> push(route: String, param: T) {
+    fun <T : Any> push(route: String, param: T) {
         scope.launch {
-            routePushChannel.send(RouteEntity(route, param, T::class))
+            routePushChannel.send(RouteEntity(route, param))
         }
     }
 
@@ -35,6 +36,5 @@ object RouteManager {
 
 data class RouteEntity<T : Any>(
     val route: String,
-    val param: T,
-    val clazz: KClass<out Any>
+    val param: T
 )

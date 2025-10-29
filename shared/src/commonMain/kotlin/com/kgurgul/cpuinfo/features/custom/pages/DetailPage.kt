@@ -14,6 +14,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.serialization.decodeArguments
+import androidx.navigation.toRoute
 import androidx.savedstate.savedState
 import co.touchlab.kermit.Logger
 import com.kgurgul.cpuinfo.features.custom.INavPage
@@ -41,6 +42,10 @@ abstract class NavPageWithArgs : INavPage {
 
     protected abstract fun keys(): List<String>
 
+    abstract fun argsPath(): String
+
+    override fun withArgs() = true
+
     override fun args() = keys().map {
         navArgument(it) {
             nullable = true
@@ -60,13 +65,18 @@ class DetailPage : NavPageWithArgs() {
 
     override fun keys() = listOf("name", "age")
 
+    override fun argsPath(): String {
+        
+    }
+
     @OptIn(InternalSerializationApi::class)
     override fun content(): @Composable (AnimatedContentScope.(NavBackStackEntry) -> Unit) {
         return {
-            val savedState = it.arguments ?: savedState()
-            val typeMap = it.destination.arguments.mapValues { it.value.type }
-            val params = DetailPageArgs::class.serializer()
-                .decodeArguments(savedState, typeMap) as DetailPageArgs
+            val params = it.toRoute<DetailPageArgs>()
+//            val savedState = it.arguments ?: savedState()
+//            val typeMap = it.destination.arguments.mapValues { it.value.type }
+//            val params = DetailPageArgs::class.serializer()
+//                .decodeArguments(savedState, typeMap) as DetailPageArgs
             Text(
                 text = "Detail ${Random.nextInt(1000)}, ${params.name}|${params.age}",
                 fontSize = 30.sp,

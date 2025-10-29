@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kgurgul.cpuinfo.features.custom.RouteManager
 import com.kgurgul.cpuinfo.features.custom.pages.DetailPage
+import com.kgurgul.cpuinfo.features.custom.pages.DetailPageArgs
 import kotlin.random.Random
 
 @Composable
@@ -21,7 +22,7 @@ fun HomePage() {
         fontSize = 50.sp,
         color = Color.White,
         modifier = Modifier.fillMaxWidth().padding(top = 100.dp).clickable {
-            RouteManager.push(route = "Detail", "ppp")
+            RouteManager.push(route = DetailPage.ROUTE, DetailPageArgs)
         }
     )
 }

@@ -13,4 +13,6 @@ interface INavPage {
 
     fun args(): List<NamedNavArgument> = emptyList()
 
+    fun withArgs() = false
+
 }
