@@ -41,9 +41,13 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
+import androidx.navigation.navigation
+import co.touchlab.kermit.Logger
 import com.kgurgul.cpuinfo.features.information.InfoContainerViewModel.Companion.ANDROID_POS
 import com.kgurgul.cpuinfo.features.information.InfoContainerViewModel.Companion.CPU_POS
 import com.kgurgul.cpuinfo.features.information.InfoContainerViewModel.Companion.GPU_POS
@@ -61,6 +65,8 @@ import com.kgurgul.cpuinfo.features.information.ram.RamInfoScreen
 import com.kgurgul.cpuinfo.features.information.screen.ScreenInfoScreen
 import com.kgurgul.cpuinfo.features.information.sensors.SensorsInfoScreen
 import com.kgurgul.cpuinfo.features.information.storage.StorageInfoScreen
+import com.kgurgul.cpuinfo.features.settings.SettingsRoute
+import com.kgurgul.cpuinfo.features.settings.SettingsScreen
 import com.kgurgul.cpuinfo.shared.Res
 import com.kgurgul.cpuinfo.shared.cpu
 import com.kgurgul.cpuinfo.shared.gpu
@@ -74,6 +80,8 @@ import com.kgurgul.cpuinfo.shared.tab_os
 import com.kgurgul.cpuinfo.ui.components.HorizontalScrollbar
 import com.kgurgul.cpuinfo.ui.components.PrimaryTopAppBar
 import com.kgurgul.cpuinfo.utils.navigation.NavigationConst
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -88,7 +96,7 @@ data object InformationBaseRoute {
     data object InformationRoute
 }
 
-fun NavGraphBuilder.informationScreen() {
+fun NavGraphBuilder.informationScreen(navController: NavHostController,nav: () -> Unit) {
     navigation<InformationBaseRoute>(
         startDestination = InformationBaseRoute.InformationRoute,
         deepLinks = listOf(
@@ -98,14 +106,16 @@ fun NavGraphBuilder.informationScreen() {
         )
     ) {
         composable<InformationBaseRoute.InformationRoute> {
-            InfoContainerScreen()
+            InfoContainerScreen(navController,nav = nav)
         }
     }
 }
 
 @Composable
 fun InfoContainerScreen(
+    navController: NavHostController,
     viewModel: InfoContainerViewModel = koinViewModel(),
+    nav: () -> Unit
 ) {
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     InfoContainerScreen(
@@ -113,6 +123,13 @@ fun InfoContainerScreen(
         onRamCleanupClicked = viewModel::onClearRamClicked,
         onPageChanged = viewModel::onPageChanged,
     )
+    LaunchedEffect(Unit) {
+        launch {
+            delay(1_000)
+            // nav.invoke()
+            navController.navigate(SettingsRoute.List)
+        }
+    }
 }
 
 @Composable

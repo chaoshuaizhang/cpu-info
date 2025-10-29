@@ -1,18 +1,12 @@
 package com.kgurgul.cpuinfo.features.custom
 
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.runtime.Composable
-import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 
 interface INavPage {
 
-    val route: String
+    val route: Routes
 
-    fun content(): @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
-
-    fun args(): List<NamedNavArgument> = emptyList()
-
-    fun withArgs() = false
+    operator fun invoke(navGraphBuilder: NavGraphBuilder, navHostController: NavHostController)
 
 }

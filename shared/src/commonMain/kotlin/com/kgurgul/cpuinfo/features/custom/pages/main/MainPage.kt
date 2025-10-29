@@ -1,6 +1,5 @@
 package com.kgurgul.cpuinfo.features.custom.pages.main
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,24 +14,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.toRoute
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
 import com.kgurgul.cpuinfo.features.custom.CustomNavigationBar
 import com.kgurgul.cpuinfo.features.custom.INavPage
+import com.kgurgul.cpuinfo.features.custom.Routes
 import com.kgurgul.cpuinfo.features.custom.viewmodel.MainIntent
 import com.kgurgul.cpuinfo.features.custom.viewmodel.MainViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 class MainPage : INavPage {
 
-    companion object {
-        const val ROUTE = "Main"
-    }
+    override val route = Routes.Main
 
-    override val route = ROUTE
-
-    override fun content(): @Composable (AnimatedContentScope.(NavBackStackEntry) -> Unit) {
-        return {
+    override fun invoke(navGraphBuilder: NavGraphBuilder, navHostController: NavHostController) {
+        navGraphBuilder.composable<Routes.Main> {
             MainPageContent()
         }
     }

@@ -6,7 +6,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -16,19 +15,12 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
 import co.touchlab.kermit.Logger
 import com.kgurgul.cpuinfo.features.applications.ApplicationsBaseRoute
 import com.kgurgul.cpuinfo.features.applications.applicationsScreen
-import com.kgurgul.cpuinfo.features.custom.CustomBaseRoute
-import com.kgurgul.cpuinfo.features.custom.RouteManager
 import com.kgurgul.cpuinfo.features.custom.nav.CustomNavHost
-import com.kgurgul.cpuinfo.features.custom.navCustomScreen
-import com.kgurgul.cpuinfo.features.custom.pages.DetailPage
-import com.kgurgul.cpuinfo.features.custom.pages.main.MainPage
 import com.kgurgul.cpuinfo.features.information.InformationBaseRoute
 import com.kgurgul.cpuinfo.features.information.informationScreen
 import com.kgurgul.cpuinfo.features.processes.ProcessesBaseRoute
@@ -53,7 +45,6 @@ import com.kgurgul.cpuinfo.ui.components.CpuNavigationSuiteScaffoldDefault
 import com.kgurgul.cpuinfo.ui.components.NavigationSuiteItemColors
 import com.kgurgul.cpuinfo.ui.theme.CpuInfoTheme
 import com.kgurgul.cpuinfo.utils.navigation.TopLevelRoute
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -64,6 +55,7 @@ fun HostScreen(
     viewModel: HostViewModel = koinViewModel(),
     navController: NavHostController = rememberNavController(),
 ) {
+    Logger.i { "NCSNJCNSJCNJS 1 ${navController.hashCode()}" }
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     HostScreen(
         uiState = uiState,
@@ -76,8 +68,8 @@ fun HostScreen(
     uiState: HostViewModel.UiState,
     navController: NavHostController = rememberNavController(),
 ) {
-    RouteManager.register(MainPage())
-    RouteManager.register(DetailPage())
+//    RouteManager.register(MainPage())
+//    RouteManager.register(DetailPage())
     val useCustom = true
     if (useCustom.not()) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -136,14 +128,15 @@ fun OriginProject(
     ) {
         NavHost(
             navController = navController,
-            startDestination = CustomBaseRoute,
+            startDestination = InformationBaseRoute,
             enterTransition = { fadeIn() },
             exitTransition = { fadeOut() },
             popEnterTransition = { fadeIn() },
             popExitTransition = { fadeOut() },
         ) {
-            navCustomScreen()
-            informationScreen()
+            informationScreen(navController) {
+                navController.navigate(SettingsRoute.Licenses)
+            }
             applicationsScreen()
             processesScreen()
             temperaturesScreen()

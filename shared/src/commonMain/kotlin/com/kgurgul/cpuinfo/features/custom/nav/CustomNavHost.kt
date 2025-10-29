@@ -5,15 +5,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import androidx.savedstate.SavedState
 import co.touchlab.kermit.Logger
 import com.kgurgul.cpuinfo.features.custom.RouteManager
-import com.kgurgul.cpuinfo.features.custom.pages.DetailPage
+import com.kgurgul.cpuinfo.features.custom.Routes
+import com.kgurgul.cpuinfo.features.custom.pages.JobGroup
 import com.kgurgul.cpuinfo.features.custom.pages.main.MainPage
+import kotlin.collections.forEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.InternalSerializationApi
 
@@ -42,16 +42,14 @@ fun CustomNavHost(navHostController: NavHostController = rememberNavController()
             }
         }
     }
+    RouteManager.register(MainPage())
+    RouteManager.register(JobGroup())
     NavHost(
         navController = navHostController,
-        startDestination = MainPage.ROUTE
+        startDestination = Routes.Main
     ) {
         RouteManager.routeMap.forEach { nav ->
-            composable(
-                route = nav.key,
-                content = nav.value.content(),
-                arguments = nav.value.args()
-            )
+            nav.value.invoke(this, navHostController)
         }
     }
 }

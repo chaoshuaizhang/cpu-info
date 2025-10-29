@@ -73,13 +73,13 @@ class PageB {
     }
 }
 
-fun NavGraphBuilder.navCustomScreen() {
-    navigation<CustomBaseRoute>(
-        startDestination = CustomBaseRoute.CustomRoute
-    ) {
-        composable<CustomBaseRoute.CustomRoute>(content = MainPage().content())
-    }
-}
+//fun NavGraphBuilder.navCustomScreen() {
+//    navigation<CustomBaseRoute>(
+//        startDestination = CustomBaseRoute.CustomRoute
+//    ) {
+//        composable<CustomBaseRoute.CustomRoute>(content = MainPage().content())
+//    }
+//}
 
 @Composable
 fun CustomScreen(viewModel: CustomViewModel = koinViewModel()) {
