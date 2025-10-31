@@ -3,8 +3,27 @@ package com.kgurgul.cpuinfo.features.custom
 import kotlinx.serialization.Serializable
 
 sealed interface Routes {
+
     @Serializable
-    object Main : Routes
+    object Home : Routes {
+        @Serializable
+        object Home : Routes
+    }
+
+    @Serializable
+    object Owner : Routes {
+        @Serializable
+        object Owner : Routes
+    }
+
+    @Serializable
+    object Main : Routes {
+        @Serializable
+        object Home : Routes
+
+        @Serializable
+        object Owner : Routes
+    }
 
     @Serializable
     object Job : Routes {

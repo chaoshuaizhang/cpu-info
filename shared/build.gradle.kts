@@ -112,6 +112,7 @@ kotlin {
                 api(libs.kotlinx.immutable)
                 api(libs.kotlinx.serialization)
                 api("io.insert-koin:koin-annotations:2.1.0")
+                implementation("org.jetbrains.compose.ui:ui-backhandler:1.9.2")
             }
         }
 

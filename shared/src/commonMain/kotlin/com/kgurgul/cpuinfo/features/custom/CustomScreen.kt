@@ -13,6 +13,10 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -23,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -38,10 +44,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
-import com.kgurgul.cpuinfo.features.custom.pages.main.MainPage
+import com.kgurgul.cpuinfo.features.custom.pages.main.HomeViewModel
+import com.kgurgul.cpuinfo.features.custom.pages.main.OwnerViewModel
 import com.kgurgul.cpuinfo.features.custom.viewmodel.MainViewModel
 import com.kgurgul.cpuinfo.utils.navigation.NavigationConst
 import kotlin.random.Random
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerialName
@@ -67,7 +75,7 @@ class PageB {
                 "Page B ${Random.nextInt(1000)}",
                 fontSize = 50.sp,
                 color = Color.White,
-                modifier = Modifier.fillMaxSize().padding(top = 100.dp)
+                modifier = Modifier.padding(top = 100.dp).fillMaxSize()
             )
         }
     }
@@ -115,7 +123,7 @@ fun CustomScreen(viewModel: CustomViewModel = koinViewModel()) {
                             }",
                             fontSize = 50.sp,
                             color = Color.White,
-                            modifier = Modifier.fillMaxWidth().padding(top = 100.dp)
+                            modifier = Modifier.padding(top = 100.dp).fillMaxWidth()
                         )
                     }
 
@@ -166,6 +174,8 @@ expect class CustomRomCollector() : ICustomMemoryCollector {
 val viewModelModules = module {
     factoryOf(::CustomViewModel)
     factoryOf(::MainViewModel)
+    factoryOf(::HomeViewModel)
+    factoryOf(::OwnerViewModel)
 }
 
 val useCaseModules = module {
@@ -198,36 +208,73 @@ val collectorModules = module {
 
 
 @Composable
-fun CustomNavigationBar(tabs: List<TabItem>, onTabChanged: (Int) -> Unit) {
-    var selectedItem by remember { mutableIntStateOf(0) }
-    NavigationBar(
-        modifier = Modifier.height(68.dp).background(Color.White)
-    ) {
-        tabs.forEachIndexed { index, item ->
+fun CustomNavigationBar(
+    tabs: List<TabItem>,
+    navController: NavHostController,
+    onTabChanged: (Int) -> Unit
+) {
+    var selectedTabIndex by rememberSaveable {
+        mutableStateOf(0)
+    }
+
+    NavigationBar {
+        // looping over each tab to generate the views and navigation for each item
+        tabs.forEachIndexed { index, tabBarItem ->
             NavigationBarItem(
-                icon = { item.selectIcon },
-                label = { Text(item.title) },
-                selected = selectedItem == index,
+                selected = selectedTabIndex == index,
                 onClick = {
-                    onTabChanged.invoke(index)
-//                    selectedItem = index
-//                    val topLevelNavOptions = navOptions {
-//                        // Pop up to the start destination of the graph to
-//                        // avoid building up a large stack of destinations
-//                        // on the back stack as users select items
-//                        popUpTo(navController.graph.findStartDestination().id) {
-//                            saveState = true
-//                            inclusive = true
-//                        }
-//                        // Avoid multiple copies of the same destination when
-//                        // reselecting the same item
-//                        launchSingleTop = true
-//                        // Restore state when reselecting a previously selected item
-//                        restoreState = true
-//                    }
-//                    navController.navigate(item, topLevelNavOptions)
-                }
-            )
+                    selectedTabIndex = index
+                    // FIXME: 这边有个问题：直接调用Push方法就会导致回退栈有问题：无法弹出StartDestination
+                    navController.navigate(tabBarItem.routes) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                icon = {
+                    TabBarIconView(
+                        isSelected = selectedTabIndex == index,
+                        selectedIcon = Icons.Filled.Favorite,
+                        unselectedIcon = Icons.Outlined.Favorite,
+                        title = tabBarItem.title,
+                        badgeAmount = 0
+                    )
+                },
+                label = { Text(tabBarItem.title) })
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TabBarIconView(
+    isSelected: Boolean,
+    selectedIcon: ImageVector,
+    unselectedIcon: ImageVector,
+    title: String,
+    badgeAmount: Int? = null
+) {
+    BadgedBox(badge = { TabBarBadgeView(badgeAmount) }) {
+        Icon(
+            imageVector = if (isSelected) {
+                selectedIcon
+            } else {
+                unselectedIcon
+            },
+            contentDescription = title
+        )
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun TabBarBadgeView(count: Int? = null) {
+    if (count != null) {
+        Badge {
+            Text(count.toString())
         }
     }
 }
@@ -235,6 +282,7 @@ fun CustomNavigationBar(tabs: List<TabItem>, onTabChanged: (Int) -> Unit) {
 
 data class TabItem(
     val tabIndex: Int,
+    val routes: Routes,
     val title: String,
     val selectIcon: ImageVector,
     val unselectIcon: ImageVector? = null

@@ -17,6 +17,7 @@ import com.kgurgul.cpuinfo.features.custom.INavPage
 import com.kgurgul.cpuinfo.features.custom.RouteEntity
 import com.kgurgul.cpuinfo.features.custom.RouteManager
 import com.kgurgul.cpuinfo.features.custom.Routes
+import com.kgurgul.cpuinfo.features.custom.nav.LocalNavHostController
 import kotlinx.serialization.Serializable
 
 class JobGroup : INavPage {
@@ -33,11 +34,14 @@ class JobGroup : INavPage {
 
 fun NavGraphBuilder.navJobList() {
     composable<Routes.Job.List> {
+        val previousBackStackEntry = LocalNavHostController.current.previousBackStackEntry
         Text(
             text = "Job List",
             fontSize = 30.sp,
             color = Color.Blue,
-            modifier = Modifier.fillMaxWidth().padding(top = 100.dp)
+            modifier = Modifier.padding(top = 100.dp).fillMaxWidth().clickable {
+                previousBackStackEntry?.savedStateHandle?.set("job.list.result", "abc 123")
+            }
         )
     }
 }
@@ -49,7 +53,7 @@ fun NavGraphBuilder.navJobDetail() {
             text = "Job Detail - ${detail.name} | ${detail.age}",
             fontSize = 30.sp,
             color = Color.Blue,
-            modifier = Modifier.fillMaxWidth().padding(top = 100.dp).clickable {
+            modifier = Modifier.padding(top = 100.dp).fillMaxWidth().clickable {
                 RouteManager.pop()
             }
         )

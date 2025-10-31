@@ -1,5 +1,6 @@
 package com.kgurgul.cpuinfo.features.custom
 
+import androidx.navigation.NavBackStackEntry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -35,6 +36,29 @@ object RouteManager {
     fun pop(route: RouteEntity<out Routes>? = null) {
         scope.launch {
             routePopChannel.send(route)
+        }
+    }
+
+    /*
+    * 退出app，不杀死，只压后台
+    * */
+    fun ifMoveAppToBackground(route: String?): Boolean {
+        return when (route) {
+            Routes.Home.Home::class.qualifiedName,
+            Routes.Owner.Owner::class.qualifiedName -> true
+
+            else -> false
+        }
+    }
+
+    fun isMainPageRoutes(route: String?): Boolean {
+        return when (route) {
+            Routes.Home::class.qualifiedName,
+            Routes.Home.Home::class.qualifiedName,
+            Routes.Owner::class.qualifiedName -> true
+            Routes.Owner.Owner::class.qualifiedName -> true
+
+            else -> false
         }
     }
 

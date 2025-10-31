@@ -23,6 +23,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.savedstate.SavedState
 import com.kgurgul.cpuinfo.features.HostScreen
 import com.kgurgul.cpuinfo.features.HostViewModel
+import com.kgurgul.cpuinfo.features.custom.nav.GlobalActivityProvider
 import com.kgurgul.cpuinfo.ui.shouldUseDarkTheme
 import com.kgurgul.cpuinfo.ui.theme.CpuInfoTheme
 import com.kgurgul.cpuinfo.ui.theme.DarkColors
@@ -42,9 +43,12 @@ class HostActivity : ComponentActivity() {
     private val viewModel: HostViewModel by viewModel()
     private val androidShortcutManager: AndroidShortcutManager by inject()
 
+    private val activityProvider: GlobalActivityProvider by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        activityProvider.onActivityCreated(this)
 
         var uiState: HostViewModel.UiState by mutableStateOf(HostViewModel.UiState())
         lifecycleScope.launch {

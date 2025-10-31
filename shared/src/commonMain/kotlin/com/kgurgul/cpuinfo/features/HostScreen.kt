@@ -45,6 +45,10 @@ import com.kgurgul.cpuinfo.ui.components.CpuNavigationSuiteScaffoldDefault
 import com.kgurgul.cpuinfo.ui.components.NavigationSuiteItemColors
 import com.kgurgul.cpuinfo.ui.theme.CpuInfoTheme
 import com.kgurgul.cpuinfo.utils.navigation.TopLevelRoute
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -62,7 +66,7 @@ fun HostScreen(
         navController = navController,
     )
 }
-
+var job: Job? = null
 @Composable
 fun HostScreen(
     uiState: HostViewModel.UiState,
